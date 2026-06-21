@@ -57,7 +57,15 @@ terraform -chdir=examples/local-override validate
 
 Update `terraform-dev.tfrc.example` to use the absolute path to this repository before running the command.
 
+OpenTofu local override smoke test:
+
+```sh
+TF_CLI_CONFIG_FILE=$PWD/examples/local-override/terraform-dev.tfrc.example \
+TMPDIR=/tmp \
+tofu -chdir=examples/local-override validate
+```
+
 Current validation status:
 
 - Terraform `v1.15.6` local override validate passed on `darwin_arm64`.
-- OpenTofu local override validation is pending because `tofu` was not installed in the first validation environment.
+- OpenTofu `v1.12.3` local override validate passed on `darwin_arm64`.
