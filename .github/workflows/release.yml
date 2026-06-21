@@ -42,12 +42,19 @@ jobs:
             prerelease="false"
             [[ "$version" == *"-alpha"* || "$version" == *"-beta"* || "$version" == *"-rc"* ]] && prerelease="true"
           fi
+          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "version must be a v-prefixed semver tag, got: $version" >&2
+            exit 1
+          fi
+          registry_version="${version#v}"
           echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "registry_version=$registry_version" >> "$GITHUB_OUTPUT"
           echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
       - run: go test ./...
       - name: Build provider artifacts
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          REGISTRY_VERSION: ${{ steps.version.outputs.registry_version }}
         shell: bash
         run: |
           set -euo pipefail
@@ -61,11 +68,46 @@ jobs:
           for target in linux/amd64 linux/arm64 darwin/arm64; do
             goos="${target%/*}"
             goarch="${target#*/}"
-            work="dist/terraform-provider-betternat_${VERSION}_${goos}_${goarch}"
+            work="dist/work/terraform-provider-betternat_${REGISTRY_VERSION}_${goos}_${goarch}"
             GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 go build -trimpath -ldflags "$ldflags" -o "$work/terraform-provider-betternat_${VERSION}" ./cmd/terraform-provider-betternat
-            (cd "$work" && zip "../terraform-provider-betternat_${VERSION}_${goos}_${goarch}.zip" "terraform-provider-betternat_${VERSION}")
+            (cd "$work" && zip "../../terraform-provider-betternat_${REGISTRY_VERSION}_${goos}_${goarch}.zip" "terraform-provider-betternat_${VERSION}")
           done
-          (cd dist && sha256sum *.zip > "terraform-provider-betternat_${VERSION}_SHA256SUMS")
+          printf '%s\n' \
+            '{' \
+            '  "version": 1,' \
+            '  "metadata": {' \
+            '    "protocol_versions": ["6.0"]' \
+            '  }' \
+            '}' > "dist/terraform-provider-betternat_${REGISTRY_VERSION}_manifest.json"
+          (cd dist && sha256sum *.zip > "terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS")
+          (cd dist && sha256sum -c "terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS")
+      - name: Sign provider checksums
+        env:
+          REGISTRY_VERSION: ${{ steps.version.outputs.registry_version }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE || secrets.PASSPHRASE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${GPG_PRIVATE_KEY}" ]]; then
+            echo "GPG_PRIVATE_KEY secret is required" >&2
+            exit 1
+          fi
+          if [[ -z "${GPG_PASSPHRASE}" ]]; then
+            echo "GPG_PASSPHRASE or PASSPHRASE secret is required" >&2
+            exit 1
+          fi
+          export GNUPGHOME="$RUNNER_TEMP/gnupg"
+          mkdir -p "$GNUPGHOME"
+          chmod 700 "$GNUPGHOME"
+          printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
+          checksum_file="dist/terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS"
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase "$GPG_PASSPHRASE" \
+            --detach-sign \
+            --output "${checksum_file}.sig" \
+            "$checksum_file"
+          gpg --batch --verify "${checksum_file}.sig" "$checksum_file"
       - name: Create or update GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -85,4 +127,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
-        run: gh release upload "$VERSION" dist/*.zip "dist/terraform-provider-betternat_${VERSION}_SHA256SUMS" --clobber
+        run: gh release upload "$VERSION" dist/*.zip dist/*_SHA256SUMS dist/*_SHA256SUMS.sig dist/*_manifest.json --clobber

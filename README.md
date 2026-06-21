@@ -86,3 +86,36 @@ terraform {
 ```
 
 Use the explicit hostname for OpenTofu until BetterNAT is published through an OpenTofu-native registry path.
+
+## Release
+
+The release workflow is designed for Terraform Registry ingestion.
+
+Required repository secrets:
+
+- `GPG_PRIVATE_KEY`: ASCII-armored private key for the Terraform Registry signing key.
+- `GPG_PASSPHRASE`: passphrase for the signing key.
+
+Tags must be v-prefixed semver tags, for example:
+
+```sh
+git tag v0.1.0-alpha.1
+git push origin v0.1.0-alpha.1
+```
+
+The workflow uploads registry-compatible assets:
+
+```text
+terraform-provider-betternat_0.1.0-alpha.1_linux_amd64.zip
+terraform-provider-betternat_0.1.0-alpha.1_linux_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.1_darwin_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.1_SHA256SUMS
+terraform-provider-betternat_0.1.0-alpha.1_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0-alpha.1_manifest.json
+```
+
+The public key fingerprint currently registered with Terraform Registry is:
+
+```text
+3EA0C6EF878F7F50C75B3329F2D78A307FAB2914
+```
