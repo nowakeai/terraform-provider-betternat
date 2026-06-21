@@ -58,7 +58,7 @@ jobs:
           ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Version=$VERSION"
           ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Commit=$commit"
           ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Date=$date"
-          for target in linux/amd64 linux/arm64; do
+          for target in linux/amd64 linux/arm64 darwin/arm64; do
             goos="${target%/*}"
             goarch="${target#*/}"
             work="dist/terraform-provider-betternat_${VERSION}_${goos}_${goarch}"
