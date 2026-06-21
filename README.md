@@ -69,3 +69,20 @@ Current validation status:
 
 - Terraform `v1.15.6` local override validate passed on `darwin_arm64`.
 - OpenTofu `v1.12.3` local override validate passed on `darwin_arm64`.
+- Terraform `v1.15.6` filesystem mirror install from provider release zip passed on `darwin_arm64`.
+- OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
+
+OpenTofu source address note:
+
+```hcl
+terraform {
+  required_providers {
+    betternat = {
+      source  = "registry.terraform.io/nowakeai/betternat"
+      version = "~> 0.1"
+    }
+  }
+}
+```
+
+Use the explicit hostname for OpenTofu until BetterNAT is published through an OpenTofu-native registry path.
