@@ -1,0 +1,9 @@
+dist/
+tmp/
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+terraform-provider-betternat
+coverage.out
+.DS_Store

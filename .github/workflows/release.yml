@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Provider version, for example v0.1.0-alpha.1"
+        required: true
+        type: string
+      prerelease:
+        description: "Mark the GitHub release as a prerelease"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            version="${{ inputs.version }}"
+            prerelease="${{ inputs.prerelease }}"
+          else
+            version="${GITHUB_REF_NAME}"
+            prerelease="false"
+            [[ "$version" == *"-alpha"* || "$version" == *"-beta"* || "$version" == *"-rc"* ]] && prerelease="true"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$prerelease" >> "$GITHUB_OUTPUT"
+      - run: go test ./...
+      - name: Build provider artifacts
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          commit="$(git rev-parse --short=12 HEAD)"
+          date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          ldflags="-s -w"
+          ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Version=$VERSION"
+          ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Commit=$commit"
+          ldflags="$ldflags -X github.com/nowakeai/terraform-provider-betternat/internal/buildinfo.Date=$date"
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64; do
+            goos="${target%/*}"
+            goarch="${target#*/}"
+            work="dist/terraform-provider-betternat_${VERSION}_${goos}_${goarch}"
+            GOOS="$goos" GOARCH="$goarch" CGO_ENABLED=0 go build -trimpath -ldflags "$ldflags" -o "$work/terraform-provider-betternat_${VERSION}" ./cmd/terraform-provider-betternat
+            (cd "$work" && zip "../terraform-provider-betternat_${VERSION}_${goos}_${goarch}.zip" "terraform-provider-betternat_${VERSION}")
+          done
+          (cd dist && sha256sum *.zip > "terraform-provider-betternat_${VERSION}_SHA256SUMS")
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--title "$VERSION")
+          [[ "$PRERELEASE" == "true" ]] && args+=(--prerelease)
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release edit "$VERSION" "${args[@]}"
+          else
+            gh release create "$VERSION" --generate-notes "${args[@]}"
+          fi
+      - name: Upload provider assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: gh release upload "$VERSION" dist/*.zip "dist/terraform-provider-betternat_${VERSION}_SHA256SUMS" --clobber
