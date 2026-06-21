@@ -4,6 +4,6 @@ tmp/
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
-terraform-provider-betternat
+/terraform-provider-betternat
 coverage.out
 .DS_Store
