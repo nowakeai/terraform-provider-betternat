@@ -1,0 +1,6 @@
+provider_installation {
+  dev_overrides {
+    "nowakeai/betternat" = "/absolute/path/to/terraform-provider-betternat"
+  }
+  direct {}
+}

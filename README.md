@@ -44,3 +44,20 @@ go test ./...
 ```
 
 For local provider development, configure a Terraform/OpenTofu provider override to point at the built `terraform-provider-betternat` binary.
+
+Terraform local override smoke test:
+
+```sh
+go build ./cmd/terraform-provider-betternat
+
+TF_CLI_CONFIG_FILE=$PWD/examples/local-override/terraform-dev.tfrc.example \
+TMPDIR=/tmp \
+terraform -chdir=examples/local-override validate
+```
+
+Update `terraform-dev.tfrc.example` to use the absolute path to this repository before running the command.
+
+Current validation status:
+
+- Terraform `v1.15.6` local override validate passed on `darwin_arm64`.
+- OpenTofu local override validation is pending because `tofu` was not installed in the first validation environment.
