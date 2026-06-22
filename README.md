@@ -25,6 +25,8 @@ terraform {
 provider "betternat" {}
 ```
 
+Registry documentation lives under [`docs/`](docs/) and resource examples under [`examples/`](examples/).
+
 ## OpenTofu
 
 OpenTofu can install the provider from the Terraform Registry when the source address includes the explicit Terraform Registry hostname:
