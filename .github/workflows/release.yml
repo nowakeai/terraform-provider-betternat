@@ -79,7 +79,7 @@ jobs:
             '    "protocol_versions": ["6.0"]' \
             '  }' \
             '}' > "dist/terraform-provider-betternat_${REGISTRY_VERSION}_manifest.json"
-          (cd dist && sha256sum *.zip > "terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS")
+          (cd dist && sha256sum *.zip *_manifest.json > "terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS")
           (cd dist && sha256sum -c "terraform-provider-betternat_${REGISTRY_VERSION}_SHA256SUMS")
       - name: Sign provider checksums
         env:
