@@ -1,5 +1,7 @@
 dist/
 tmp/
+.secrets/*
+!.secrets/README.md
 .terraform/
 *.tfstate
 *.tfstate.*
