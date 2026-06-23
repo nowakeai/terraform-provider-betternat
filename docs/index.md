@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.2"
+      version = "= 0.1.0-alpha.3"
     }
   }
 }
@@ -26,7 +26,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "registry.terraform.io/nowakeai/betternat"
-      version = "= 0.1.0-alpha.2"
+      version = "= 0.1.0-alpha.3"
     }
   }
 }
@@ -36,7 +36,7 @@ provider "betternat" {}
 
 ## Current Alpha Scope
 
-`0.1.0-alpha.2` is a technical preview of the provider distribution path.
+`0.1.0-alpha.3` is a technical preview of the provider distribution path.
 
 The provider currently deploys the `betternat_gateway` resource through a bootstrap flow. BetterNAT does not publish a production AMI in the first alpha, so users must provide an explicit Linux AMI and release artifact URLs/checksums for the appliance binaries.
 

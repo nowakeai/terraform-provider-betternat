@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.2"
+      version = "= 0.1.0-alpha.3"
     }
   }
 }
@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "registry.terraform.io/nowakeai/betternat"
-      version = "= 0.1.0-alpha.2"
+      version = "= 0.1.0-alpha.3"
     }
   }
 }
@@ -89,8 +89,8 @@ Current validation status:
 - OpenTofu `v1.12.3` local override validate passed on `darwin_arm64`.
 - Terraform `v1.15.6` filesystem mirror install from provider release zip passed on `darwin_arm64`.
 - OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
-- Terraform `v1.15.6` Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.2`.
-- OpenTofu `v1.12.3` Terraform Registry install and validate passed for `registry.terraform.io/nowakeai/betternat` `0.1.0-alpha.2`.
+- Terraform `v1.15.6` Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.3`.
+- OpenTofu `v1.12.3` Terraform Registry install and validate passed for `registry.terraform.io/nowakeai/betternat` `0.1.0-alpha.3`.
 
 OpenTofu source address note:
 
@@ -119,19 +119,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0-alpha.2
-git push origin v0.1.0-alpha.2
+git tag v0.1.0-alpha.3
+git push origin v0.1.0-alpha.3
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0-alpha.2_linux_amd64.zip
-terraform-provider-betternat_0.1.0-alpha.2_linux_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.2_darwin_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.2_SHA256SUMS
-terraform-provider-betternat_0.1.0-alpha.2_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0-alpha.2_manifest.json
+terraform-provider-betternat_0.1.0-alpha.3_linux_amd64.zip
+terraform-provider-betternat_0.1.0-alpha.3_linux_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.3_darwin_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.3_SHA256SUMS
+terraform-provider-betternat_0.1.0-alpha.3_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0-alpha.3_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:
