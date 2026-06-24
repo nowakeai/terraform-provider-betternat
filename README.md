@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.7"
+      version = "= 0.1.0-alpha.8"
     }
   }
 }
@@ -37,7 +37,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.7"
+      version = "= 0.1.0-alpha.8"
     }
   }
 }
@@ -83,6 +83,10 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
+- Provider `0.1.0-alpha.8` local `go test ./...` and `go build
+  ./cmd/terraform-provider-betternat` passed before publication.
+- Provider `0.1.0-alpha.8` adds BetterNAT runtime `v0.1.0-alpha.6` support
+  while preserving `v0.1.0-alpha.2` support.
 - Terraform `v1.14.7` Registry install and validate passed for provider
   `0.1.0-alpha.7`.
 - Provider `0.1.0-alpha.7` clean AWS validation passed for bootstrap,
@@ -128,19 +132,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0-alpha.7
-git push origin v0.1.0-alpha.7
+git tag v0.1.0-alpha.8
+git push origin v0.1.0-alpha.8
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0-alpha.7_linux_amd64.zip
-terraform-provider-betternat_0.1.0-alpha.7_linux_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.7_darwin_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.7_SHA256SUMS
-terraform-provider-betternat_0.1.0-alpha.7_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0-alpha.7_manifest.json
+terraform-provider-betternat_0.1.0-alpha.8_linux_amd64.zip
+terraform-provider-betternat_0.1.0-alpha.8_linux_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.8_darwin_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.8_SHA256SUMS
+terraform-provider-betternat_0.1.0-alpha.8_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0-alpha.8_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:

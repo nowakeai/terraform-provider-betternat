@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.7"
+      version = "= 0.1.0-alpha.8"
     }
   }
 }
@@ -69,7 +69,7 @@ resource "betternat_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  betternat_version = "v0.1.0-alpha.2"
+  betternat_version = "v0.1.0-alpha.6"
   bootstrap_mode    = "cloud_init"
 
   datapath_engine          = "loxilb"
@@ -194,6 +194,7 @@ AMI.
 
 | Provider version | Supported `betternat_version` values | Notes |
 | --- | --- | --- |
+| `0.1.0-alpha.8` | `v0.1.0-alpha.2`, `v0.1.0-alpha.6` | Adds support for the current BetterNAT runtime release while keeping alpha2 compatibility. |
 | `0.1.0-alpha.7` | `v0.1.0-alpha.2` | Adds `bootstrap_mode` and `associate_public_ip_address` provider UX. |
 | `0.1.0-alpha.6` | `v0.1.0-alpha.2` | First provider with built-in runtime artifact URL/checksum derivation. |
 
@@ -299,7 +300,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `min_size` (Number) ASG minimum size. Defaults to `1`.
 - `desired_capacity` (Number) ASG desired capacity. Defaults to `2`, giving one active node and one standby node.
 - `max_size` (Number) ASG maximum size. Defaults to `3`.
-- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0-alpha.2`.
+- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0-alpha.6`.
 - `agent_binary_url` (String, Sensitive) Optional URL override for the BetterNAT agent binary installed on every gateway node.
 - `agent_binary_sha256` (String) Optional SHA256 checksum override for `agent_binary_url`.
 - `cli_binary_url` (String, Sensitive) Optional URL override for the BetterNAT CLI binary installed on every gateway node.
