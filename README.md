@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.6"
+      version = "= 0.1.0-alpha.7"
     }
   }
 }
@@ -37,7 +37,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.6"
+      version = "= 0.1.0-alpha.7"
     }
   }
 }
@@ -93,6 +93,7 @@ Current validation status:
 - OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
 - OpenTofu Registry provider protocol lists `0.1.0-alpha.4` for darwin/arm64, linux/amd64, and linux/arm64.
 - Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.4`.
+- Provider `0.1.0-alpha.7` validation is pending release publication.
 
 OpenTofu source address note:
 
@@ -122,19 +123,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0-alpha.6
-git push origin v0.1.0-alpha.6
+git tag v0.1.0-alpha.7
+git push origin v0.1.0-alpha.7
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0-alpha.6_linux_amd64.zip
-terraform-provider-betternat_0.1.0-alpha.6_linux_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.6_darwin_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.6_SHA256SUMS
-terraform-provider-betternat_0.1.0-alpha.6_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0-alpha.6_manifest.json
+terraform-provider-betternat_0.1.0-alpha.7_linux_amd64.zip
+terraform-provider-betternat_0.1.0-alpha.7_linux_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.7_darwin_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.7_SHA256SUMS
+terraform-provider-betternat_0.1.0-alpha.7_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0-alpha.7_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:

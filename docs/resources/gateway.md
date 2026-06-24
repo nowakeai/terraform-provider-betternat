@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.6"
+      version = "= 0.1.0-alpha.7"
     }
   }
 }
@@ -194,6 +194,7 @@ AMI.
 
 | Provider version | Supported `betternat_version` values | Notes |
 | --- | --- | --- |
+| `0.1.0-alpha.7` | `v0.1.0-alpha.2` | Adds `bootstrap_mode` and `associate_public_ip_address` provider UX. |
 | `0.1.0-alpha.6` | `v0.1.0-alpha.2` | First provider with built-in runtime artifact URL/checksum derivation. |
 
 The provider fails with a clear error when `betternat_version` is unsupported.
