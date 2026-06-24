@@ -37,6 +37,9 @@ Private prebaked BetterNAT AMIs can opt into
 per-node auto-assigned public IPv4 because the AMI already contains the runtime
 and no first-boot dependency downloads are required.
 
+`associate_public_ip_address` is available as an advanced launch-template
+override when an environment needs to force the per-node public IPv4 setting.
+
 Provider patch releases are intended to be non-breaking. They must not remove
 Terraform fields, remove documented `betternat_version` support, introduce
 incompatible state changes, or require replacement for unchanged

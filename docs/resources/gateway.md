@@ -132,6 +132,9 @@ With `bootstrap_mode = "prebaked_ami"`, stable EIP deployments disable per-node
 auto-assigned public IPv4 because the AMI already contains the BetterNAT runtime
 and no first-boot package/image/artifact downloads are required.
 
+Set `associate_public_ip_address` only when you deliberately want to override
+the provider-derived public IPv4 behavior for the launch template.
+
 ### Non-Stable Egress IP
 
 With `stable_egress_ip = false`, BetterNAT does not manage a shared EIP. The
@@ -181,6 +184,11 @@ Public IPv4 behavior:
 | `cloud_init` | `false` | Enabled; the active node public IP is the egress identity. |
 | `prebaked_ami` | `true` | Disabled; the shared EIP is the egress identity. |
 | `prebaked_ami` | `false` | Enabled; the active node public IP is the egress identity. |
+
+`associate_public_ip_address` overrides the table above. For example, a private
+VPC with NAT/VPC endpoints may set it to `false` even in `cloud_init` mode. A
+troubleshooting environment may set it to `true` even for a prebaked stable-EIP
+AMI.
 
 ### Runtime Support Matrix
 
