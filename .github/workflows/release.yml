@@ -118,10 +118,18 @@ jobs:
           set -euo pipefail
           args=(--title "$VERSION")
           [[ "$PRERELEASE" == "true" ]] && args+=(--prerelease)
+          notes_file="docs/release-notes/${VERSION}.md"
+          if [[ -f "$notes_file" ]]; then
+            args+=(--notes-file "$notes_file")
+          fi
           if gh release view "$VERSION" >/dev/null 2>&1; then
             gh release edit "$VERSION" "${args[@]}"
           else
-            gh release create "$VERSION" --generate-notes "${args[@]}"
+            if [[ -f "$notes_file" ]]; then
+              gh release create "$VERSION" "${args[@]}"
+            else
+              gh release create "$VERSION" --generate-notes "${args[@]}"
+            fi
           fi
       - name: Upload provider assets
         env:

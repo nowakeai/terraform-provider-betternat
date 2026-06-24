@@ -83,6 +83,10 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
+- Terraform `v1.14.7` Registry install and validate passed for provider
+  `0.1.0-alpha.7`.
+- Provider `0.1.0-alpha.7` clean AWS validation passed for bootstrap,
+  proactive handover, destroy, and residual scan.
 - Terraform `v1.14.7` local override validate passed for
   `examples/local-override`, `examples/provider`, and
   `examples/resources/betternat_gateway` on `linux/amd64` for provider
@@ -93,7 +97,8 @@ Current validation status:
 - OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
 - OpenTofu Registry provider protocol lists `0.1.0-alpha.4` for darwin/arm64, linux/amd64, and linux/arm64.
 - Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.4`.
-- Provider `0.1.0-alpha.7` validation is pending release publication.
+- OpenTofu Registry propagation for provider `0.1.0-alpha.7` was still pending
+  during the final validation window.
 
 OpenTofu source address note:
 
