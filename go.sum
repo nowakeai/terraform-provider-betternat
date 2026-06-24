@@ -87,8 +87,8 @@ github.com/mattn/go-isatty v0.0.22 h1:j8l17JJ9i6VGPUFUYoTUKPSgKe/83EYU2zBC7YNKMw
 github.com/mattn/go-isatty v0.0.22/go.mod h1:ZXfXG4SQHsB/w3ZeOYbR0PrPwLy+n6xiMrJlRFqopa4=
 github.com/mitchellh/go-testing-interface v1.14.1 h1:jrgshOhYAUVNMAJiKbEu7EqAwgJJ2JqpQmpLJOu07cU=
 github.com/mitchellh/go-testing-interface v1.14.1/go.mod h1:gfgS7OtZj6MA4U1UrDRp04twqAjfvlZyCfX3sDjEym8=
-github.com/nowakeai/betternat v0.1.0-alpha.3 h1:c5fi6oiSvRnVbi3K3mfe8Ltjr/MmTYxXjpFR2pRO15c=
-github.com/nowakeai/betternat v0.1.0-alpha.3/go.mod h1:nQ52HTbdTrx8vA0OBKyd000jzAa3IJ9c+jtbXy9AB94=
+github.com/nowakeai/betternat v0.1.0-alpha.4 h1:ssTLfJdIl+1lnm624nDncxDBLyczULQvvO7quh0RAHw=
+github.com/nowakeai/betternat v0.1.0-alpha.4/go.mod h1:nQ52HTbdTrx8vA0OBKyd000jzAa3IJ9c+jtbXy9AB94=
 github.com/oklog/run v1.2.0 h1:O8x3yXwah4A73hJdlrwo/2X6J62gE5qTMusH0dvz60E=
 github.com/oklog/run v1.2.0/go.mod h1:mgDbKRSwPhJfesJ4PntqFUbKQRZ50NgmZTSPlFA0YFk=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

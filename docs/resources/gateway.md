@@ -121,6 +121,11 @@ Use this mode when downstream services allowlist your public source IP.
 This mode keeps the public IP stable for new flows after failover. Existing
 connections are not preserved.
 
+Gateway nodes may still have ordinary per-node public IPv4 addresses for
+bootstrap and management/control-plane reachability. Treat those addresses as
+operational reachability only; the shared EIP is the intended public source IP
+for private-subnet egress in stable mode.
+
 ### Non-Stable Egress IP
 
 With `stable_egress_ip = false`, BetterNAT does not manage a shared EIP. The
@@ -265,7 +270,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `loxicmd_binary_sha256` (String) SHA256 checksum for `loxicmd_binary_url`.
 - `datapath_engine` (String) Primary datapath. Defaults to `loxilb`. Accepted values are `loxilb` and `nftables`.
 - `fallback_datapath_engine` (String) Fallback datapath. Defaults to `nftables`. Accepted values are empty string or `nftables`.
-- `stable_egress_ip` (Boolean) Manage a shared EIP so new flows converge back to the same public IP after failover. Defaults to `true`.
+- `stable_egress_ip` (Boolean) Manage a shared EIP so new private-subnet egress flows converge back to the same public IP after failover. Gateway nodes may still have ordinary public IPv4 addresses for bootstrap and management. Defaults to `true`.
 - `ha_profile` (String) HA timing profile. Use `default`. Legacy values `stable`, `balanced`, and `fast` are accepted as aliases for `default`.
 - `ha_lease_ttl_seconds` (Number) Advanced override for HA lease TTL in seconds. Leave unset to use profile defaults.
 - `ha_renew_interval_seconds` (Number) Advanced override for HA lease renew interval in seconds. Leave unset to use profile defaults.
