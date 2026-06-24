@@ -192,15 +192,16 @@ AMI.
 
 ### Alpha Runtime Versions
 
-For the current alpha, use provider `0.1.0-alpha.9` with:
+For the normal current alpha install path, use provider `0.1.0-alpha.8` or
+`0.1.0-alpha.9` with:
 
 ```terraform
-betternat_version = "v0.1.0-alpha.8"
+betternat_version = "v0.1.0-alpha.6"
 ```
 
-Older alpha runtime versions may still work for compatibility testing, but the
-alpha docs do not try to maintain a long-term support matrix. A formal support
-matrix belongs with the production release line.
+Runtime `v0.1.0-alpha.8` can be tested with explicit artifact URL and checksum
+overrides. The alpha docs do not try to maintain a long-term support matrix. A
+formal support matrix belongs with the production release line.
 
 ## HA Lifecycle
 
