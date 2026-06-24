@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.4"
+      version = "= 0.1.0-alpha.5"
     }
   }
 }
@@ -19,24 +19,12 @@ terraform {
 provider "betternat" {}
 ```
 
-For OpenTofu, use the explicit Terraform Registry hostname until the OpenTofu-native registry entry is approved:
-
-```terraform
-terraform {
-  required_providers {
-    betternat = {
-      source  = "registry.terraform.io/nowakeai/betternat"
-      version = "= 0.1.0-alpha.4"
-    }
-  }
-}
-
-provider "betternat" {}
-```
+OpenTofu can use the same `source = "nowakeai/betternat"` address because the
+provider is registered in the OpenTofu Registry.
 
 ## Current Alpha Scope
 
-`0.1.0-alpha.4` is a technical preview of the provider distribution path.
+`0.1.0-alpha.5` is a technical preview of the provider distribution path.
 
 The provider currently deploys the `betternat_gateway` resource through a bootstrap flow. BetterNAT does not publish a production AMI in the first alpha, so users must provide an explicit Linux AMI and release artifact URLs/checksums for the gateway node binaries.
 
@@ -56,7 +44,9 @@ The provider uses the default AWS credential chain through the AWS SDK. Typical 
 
 ## OpenTofu Registry Status
 
-OpenTofu can install this provider from the Terraform Registry when the source address is explicit. OpenTofu-native registry publication is tracked in:
+OpenTofu can install this provider from the OpenTofu Registry with the same
+source address:
 
-- https://github.com/opentofu/registry/issues/4494
-- https://github.com/opentofu/registry/issues/4496
+```terraform
+source = "nowakeai/betternat"
+```

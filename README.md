@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.4"
+      version = "= 0.1.0-alpha.5"
     }
   }
 }
@@ -29,23 +29,21 @@ Registry documentation lives under [`docs/`](docs/) and resource examples under 
 
 ## OpenTofu
 
-OpenTofu can install the provider from the Terraform Registry when the source address includes the explicit Terraform Registry hostname:
+OpenTofu can install the provider from the OpenTofu Registry with the same
+source address:
 
 ```hcl
 terraform {
   required_providers {
     betternat = {
-      source  = "registry.terraform.io/nowakeai/betternat"
-      version = "= 0.1.0-alpha.4"
+      source  = "nowakeai/betternat"
+      version = "= 0.1.0-alpha.5"
     }
   }
 }
 ```
 
-OpenTofu-native registry publication is tracked in:
-
-- https://github.com/opentofu/registry/issues/4494
-- https://github.com/opentofu/registry/issues/4496
+The provider is also published through the Terraform Registry for Terraform CLI.
 
 ## Development
 
@@ -89,8 +87,8 @@ Current validation status:
 - OpenTofu `v1.12.3` local override validate passed on `darwin_arm64`.
 - Terraform `v1.15.6` filesystem mirror install from provider release zip passed on `darwin_arm64`.
 - OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
-- Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.2`.
-- Provider `0.1.0-alpha.3` GitHub release artifact and filesystem-mirror validation passed, but Terraform Registry ingestion had not propagated at the last check.
+- OpenTofu Registry provider protocol lists `0.1.0-alpha.4` for darwin/arm64, linux/amd64, and linux/arm64.
+- Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.4`.
 
 OpenTofu source address note:
 
@@ -98,14 +96,15 @@ OpenTofu source address note:
 terraform {
   required_providers {
     betternat = {
-      source  = "registry.terraform.io/nowakeai/betternat"
+      source  = "nowakeai/betternat"
       version = "~> 0.1"
     }
   }
 }
 ```
 
-Use the explicit hostname for OpenTofu until BetterNAT is published through an OpenTofu-native registry path.
+The explicit `registry.terraform.io/nowakeai/betternat` source remains useful
+only when intentionally testing Terraform Registry compatibility from OpenTofu.
 
 ## Release
 
@@ -119,19 +118,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0-alpha.4
-git push origin v0.1.0-alpha.4
+git tag v0.1.0-alpha.5
+git push origin v0.1.0-alpha.5
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0-alpha.4_linux_amd64.zip
-terraform-provider-betternat_0.1.0-alpha.4_linux_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.4_darwin_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.4_SHA256SUMS
-terraform-provider-betternat_0.1.0-alpha.4_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0-alpha.4_manifest.json
+terraform-provider-betternat_0.1.0-alpha.5_linux_amd64.zip
+terraform-provider-betternat_0.1.0-alpha.5_linux_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.5_darwin_arm64.zip
+terraform-provider-betternat_0.1.0-alpha.5_SHA256SUMS
+terraform-provider-betternat_0.1.0-alpha.5_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0-alpha.5_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:
