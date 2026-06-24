@@ -32,6 +32,11 @@ so users provide an explicit Linux AMI and a supported `betternat_version`; the
 provider derives the gateway node binary URLs and checksums for that runtime
 version.
 
+Provider patch releases are intended to be non-breaking. They must not remove
+Terraform fields, remove documented `betternat_version` support, introduce
+incompatible state changes, or require replacement for unchanged
+configuration.
+
 ## Authentication
 
 The provider uses the default AWS credential chain through the AWS SDK. Typical options include:

@@ -148,6 +148,16 @@ release installs.
 `loxicmd_binary_url` is optional. If it is unset, bootstrap installs a Docker
 wrapper for LoxiLB tooling.
 
+### Runtime Support Matrix
+
+| Provider version | Supported `betternat_version` values | Notes |
+| --- | --- | --- |
+| `0.1.0-alpha.6` | `v0.1.0-alpha.2` | First provider with built-in runtime artifact URL/checksum derivation. |
+
+The provider fails with a clear error when `betternat_version` is unsupported.
+Provider patch releases should not remove a documented runtime version from
+this matrix.
+
 ## HA Lifecycle
 
 The node pool is active/standby:
@@ -190,6 +200,12 @@ Provider upgrades may reconcile safe supporting resources in place, such as IAM
 policy and coordination table metadata. The
 `provider_infrastructure_revision` read-only field records the provider-owned
 infrastructure revision used for that reconciliation.
+
+Provider patch releases are intended to be non-breaking: no Terraform field
+removal, incompatible state change, removal of supported runtime versions, or
+new replacement requirement for unchanged configuration. Runtime patch releases
+are also intended to preserve agent config, CLI, metrics, HA coordination, and
+bootstrap compatibility for the same supported line.
 
 ## Destroy And Rollback Lifecycle
 
