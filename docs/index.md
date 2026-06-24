@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.5"
+      version = "= 0.1.0-alpha.6"
     }
   }
 }
@@ -24,9 +24,13 @@ provider is registered in the OpenTofu Registry.
 
 ## Current Alpha Scope
 
-`0.1.0-alpha.5` is a technical preview of the provider distribution path.
+`0.1.0-alpha.6` is a technical preview of the provider distribution path.
 
-The provider currently deploys the `betternat_gateway` resource through a bootstrap flow. BetterNAT does not publish a production AMI in the first alpha, so users must provide an explicit Linux AMI and release artifact URLs/checksums for the gateway node binaries.
+The provider currently deploys the `betternat_gateway` resource through a
+bootstrap flow. BetterNAT does not publish a production AMI in the first alpha,
+so users provide an explicit Linux AMI and a supported `betternat_version`; the
+provider derives the gateway node binary URLs and checksums for that runtime
+version.
 
 ## Authentication
 

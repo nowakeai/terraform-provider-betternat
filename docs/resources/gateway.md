@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.5"
+      version = "= 0.1.0-alpha.6"
     }
   }
 }
@@ -69,10 +69,7 @@ resource "betternat_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat-agent_v0.1.0-alpha.2_linux_arm64"
-  agent_binary_sha256 = "replace-with-agent-sha256"
-  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat_v0.1.0-alpha.2_linux_arm64"
-  cli_binary_sha256   = "replace-with-cli-sha256"
+  betternat_version = "v0.1.0-alpha.2"
 
   datapath_engine          = "loxilb"
   fallback_datapath_engine = "nftables"
@@ -136,19 +133,17 @@ required.
 
 ## Bootstrap And Artifacts
 
-The first alpha does not publish a BetterNAT AMI. Provide `ami_id` and explicit
-binary URLs/checksums for bootstrap installs.
+The first alpha does not publish a BetterNAT AMI. Provide `ami_id` and set
+`betternat_version` for bootstrap installs.
 
-If you use an ARM instance type such as `t4g.small`, use Linux `arm64` release
-artifacts. If you use an x86_64 instance type such as `t3.small`, use Linux
-`amd64` release artifacts.
+The provider uses `betternat_version` and `instance_type` to derive the matching
+Linux `arm64` or `amd64` GitHub Release artifacts and SHA256 checksums for
+`betternat-agent` and the `betternat` CLI.
 
-`agent_binary_url` installs `betternat-agent` on each gateway node. Set
-`agent_binary_sha256` so cloud-init verifies the download before installation.
-
-`cli_binary_url` installs the `betternat` CLI on each gateway node. Set
-`cli_binary_sha256` so `betternat status`, `betternat doctor --live`, and
-handover commands are available during operations.
+The explicit `agent_binary_url`, `agent_binary_sha256`, `cli_binary_url`, and
+`cli_binary_sha256` fields remain available as advanced overrides for mirrored,
+air-gapped, or unreleased test builds. Leave them empty for normal public
+release installs.
 
 `loxicmd_binary_url` is optional. If it is unset, bootstrap installs a Docker
 wrapper for LoxiLB tooling.
@@ -183,9 +178,9 @@ version:
 - `desired_capacity`
 - `max_size`
 
-Changing topology, bootstrap, route ownership, datapath, EIP mode, HA timing,
-AMI, instance type, subnet IDs, private CIDRs, or tags requires replacing the
-resource:
+Changing topology, `betternat_version`, bootstrap artifact overrides, route
+ownership, datapath, EIP mode, HA timing, AMI, instance type, subnet IDs,
+private CIDRs, or tags requires replacing the resource:
 
 ```shell
 terraform apply -replace=betternat_gateway.egress
@@ -245,10 +240,11 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `min_size` (Number) ASG minimum size. Defaults to `1`.
 - `desired_capacity` (Number) ASG desired capacity. Defaults to `2`, giving one active node and one standby node.
 - `max_size` (Number) ASG maximum size. Defaults to `3`.
-- `agent_binary_url` (String, Sensitive) URL for the BetterNAT agent binary installed on every gateway node.
-- `agent_binary_sha256` (String) SHA256 checksum for `agent_binary_url`. When set, cloud-init verifies the downloaded agent before execution.
-- `cli_binary_url` (String, Sensitive) URL for the BetterNAT CLI binary installed on every gateway node.
-- `cli_binary_sha256` (String) SHA256 checksum for `cli_binary_url`. When set, cloud-init verifies the downloaded CLI before installation.
+- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0-alpha.2`.
+- `agent_binary_url` (String, Sensitive) Optional URL override for the BetterNAT agent binary installed on every gateway node.
+- `agent_binary_sha256` (String) Optional SHA256 checksum override for `agent_binary_url`.
+- `cli_binary_url` (String, Sensitive) Optional URL override for the BetterNAT CLI binary installed on every gateway node.
+- `cli_binary_sha256` (String) Optional SHA256 checksum override for `cli_binary_url`.
 - `loxicmd_binary_url` (String, Sensitive) Optional URL for a host `loxicmd` binary. If unset, bootstrap installs a Docker wrapper.
 - `loxicmd_binary_sha256` (String) SHA256 checksum for `loxicmd_binary_url`.
 - `datapath_engine` (String) Primary datapath. Defaults to `loxilb`. Accepted values are `loxilb` and `nftables`.

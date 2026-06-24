@@ -2,7 +2,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.5"
+      version = "= 0.1.0-alpha.6"
     }
   }
 }
@@ -22,10 +22,7 @@ resource "betternat_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat-agent_v0.1.0-alpha.2_linux_arm64"
-  agent_binary_sha256 = "replace-with-agent-sha256"
-  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat_v0.1.0-alpha.2_linux_arm64"
-  cli_binary_sha256   = "replace-with-cli-sha256"
+  betternat_version = "v0.1.0-alpha.2"
 
   public_subnet_ids = {
     us-west-2a = "subnet-public-a"
