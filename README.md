@@ -85,8 +85,8 @@ Current validation status:
 
 - Provider `0.1.0-alpha.9` local `go test ./...` and `go build
   ./cmd/terraform-provider-betternat` passed before publication.
-- Provider `0.1.0-alpha.9` adds BetterNAT runtime `v0.1.0-alpha.8` support
-  while preserving `v0.1.0-alpha.2` and `v0.1.0-alpha.6` support.
+- Provider `0.1.0-alpha.9` is the current alpha provider and uses BetterNAT
+  runtime `v0.1.0-alpha.8` in public examples.
 - Terraform `v1.14.7` Registry install and validate passed for provider
   `0.1.0-alpha.7`.
 - Provider `0.1.0-alpha.7` clean AWS validation passed for bootstrap,

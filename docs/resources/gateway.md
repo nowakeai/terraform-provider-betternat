@@ -190,18 +190,17 @@ VPC with NAT/VPC endpoints may set it to `false` even in `cloud_init` mode. A
 troubleshooting environment may set it to `true` even for a prebaked stable-EIP
 AMI.
 
-### Runtime Support Matrix
+### Alpha Runtime Versions
 
-| Provider version | Supported `betternat_version` values | Notes |
-| --- | --- | --- |
-| `0.1.0-alpha.9` | `v0.1.0-alpha.2`, `v0.1.0-alpha.6`, `v0.1.0-alpha.8` | Adds support for the ASG lifecycle handover retry runtime while keeping earlier alpha runtime compatibility. |
-| `0.1.0-alpha.8` | `v0.1.0-alpha.2`, `v0.1.0-alpha.6` | Adds support for runtime alpha6 while keeping alpha2 compatibility. |
-| `0.1.0-alpha.7` | `v0.1.0-alpha.2` | Adds `bootstrap_mode` and `associate_public_ip_address` provider UX. |
-| `0.1.0-alpha.6` | `v0.1.0-alpha.2` | First provider with built-in runtime artifact URL/checksum derivation. |
+For the current alpha, use provider `0.1.0-alpha.9` with:
 
-The provider fails with a clear error when `betternat_version` is unsupported.
-Provider patch releases should not remove a documented runtime version from
-this matrix.
+```terraform
+betternat_version = "v0.1.0-alpha.8"
+```
+
+Older alpha runtime versions may still work for compatibility testing, but the
+alpha docs do not try to maintain a long-term support matrix. A formal support
+matrix belongs with the production release line.
 
 ## HA Lifecycle
 
