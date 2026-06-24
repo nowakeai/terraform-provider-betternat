@@ -26,11 +26,16 @@ provider is registered in the OpenTofu Registry.
 
 `0.1.0-alpha.6` is a technical preview of the provider distribution path.
 
-The provider currently deploys the `betternat_gateway` resource through a
-bootstrap flow. BetterNAT does not publish a production AMI in the first alpha,
-so users provide an explicit Linux AMI and a supported `betternat_version`; the
-provider derives the gateway node binary URLs and checksums for that runtime
-version.
+The provider currently deploys the `betternat_gateway` resource through the
+default `bootstrap_mode = "cloud_init"` flow. BetterNAT does not publish a
+production AMI in the first alpha, so users provide an explicit Linux AMI and a
+supported `betternat_version`; the provider derives the gateway node binary URLs
+and checksums for that runtime version.
+
+Private prebaked BetterNAT AMIs can opt into
+`bootstrap_mode = "prebaked_ami"`. In stable EIP mode, that path disables
+per-node auto-assigned public IPv4 because the AMI already contains the runtime
+and no first-boot dependency downloads are required.
 
 Provider patch releases are intended to be non-breaking. They must not remove
 Terraform fields, remove documented `betternat_version` support, introduce

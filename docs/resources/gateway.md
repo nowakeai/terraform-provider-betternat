@@ -70,6 +70,7 @@ resource "betternat_gateway" "egress" {
   max_size         = 3
 
   betternat_version = "v0.1.0-alpha.2"
+  bootstrap_mode    = "cloud_init"
 
   datapath_engine          = "loxilb"
   fallback_datapath_engine = "nftables"
@@ -121,10 +122,15 @@ Use this mode when downstream services allowlist your public source IP.
 This mode keeps the public IP stable for new flows after failover. Existing
 connections are not preserved.
 
-Gateway nodes may still have ordinary per-node public IPv4 addresses for
-bootstrap and management/control-plane reachability. Treat those addresses as
-operational reachability only; the shared EIP is the intended public source IP
-for private-subnet egress in stable mode.
+With the default `bootstrap_mode = "cloud_init"`, gateway nodes also have
+ordinary per-node public IPv4 addresses for bootstrap and
+management/control-plane reachability. Treat those addresses as operational
+reachability only; the shared EIP is the intended public source IP for
+private-subnet egress in stable mode.
+
+With `bootstrap_mode = "prebaked_ami"`, stable EIP deployments disable per-node
+auto-assigned public IPv4 because the AMI already contains the BetterNAT runtime
+and no first-boot package/image/artifact downloads are required.
 
 ### Non-Stable Egress IP
 
@@ -138,8 +144,10 @@ required.
 
 ## Bootstrap And Artifacts
 
-The first alpha does not publish a BetterNAT AMI. Provide `ami_id` and set
-`betternat_version` for bootstrap installs.
+The default mode is `bootstrap_mode = "cloud_init"`. Use this for ordinary
+Linux AMIs. The first alpha does not publish a BetterNAT AMI, so the public
+quick-start path provides `ami_id` and sets `betternat_version` for bootstrap
+installs.
 
 The provider uses `betternat_version` and `instance_type` to derive the matching
 Linux `arm64` or `amd64` GitHub Release artifacts and SHA256 checksums for
@@ -152,6 +160,27 @@ release installs.
 
 `loxicmd_binary_url` is optional. If it is unset, bootstrap installs a Docker
 wrapper for LoxiLB tooling.
+
+Use `bootstrap_mode = "prebaked_ami"` only for BetterNAT AMIs that already
+contain Docker or the selected LoxiLB runtime, LoxiLB, `betternat`,
+`betternat-agent`, `loxicmd`, sysctl settings, and systemd units. In this mode,
+user data only writes `/etc/betternat/agent.json`, reapplies the baseline sysctl
+profile, starts `loxilb.service`, and restarts or enables
+`betternat-agent.service`.
+
+`prebaked_ami` rejects bootstrap artifact overrides such as `agent_binary_url`
+or `cli_binary_url`; the runtime is part of the AMI. `betternat_version` may
+still be recorded in configuration for operator clarity, but it is not used to
+download artifacts in `prebaked_ami` mode.
+
+Public IPv4 behavior:
+
+| `bootstrap_mode` | `stable_egress_ip` | Auto-assigned public IPv4 |
+| --- | --- | --- |
+| `cloud_init` | `true` | Enabled for bootstrap and management/control-plane reachability. |
+| `cloud_init` | `false` | Enabled; the active node public IP is the egress identity. |
+| `prebaked_ami` | `true` | Disabled; the shared EIP is the egress identity. |
+| `prebaked_ami` | `false` | Enabled; the active node public IP is the egress identity. |
 
 ### Runtime Support Matrix
 
@@ -193,9 +222,9 @@ version:
 - `desired_capacity`
 - `max_size`
 
-Changing topology, `betternat_version`, bootstrap artifact overrides, route
-ownership, datapath, EIP mode, HA timing, AMI, instance type, subnet IDs,
-private CIDRs, or tags requires replacing the resource:
+Changing topology, `bootstrap_mode`, `betternat_version`, bootstrap artifact
+overrides, route ownership, datapath, EIP mode, HA timing, AMI, instance type,
+subnet IDs, private CIDRs, or tags requires replacing the resource:
 
 ```shell
 terraform apply -replace=betternat_gateway.egress
