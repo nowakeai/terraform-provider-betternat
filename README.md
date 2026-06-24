@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.9"
+      version = "= 0.1.0"
     }
   }
 }
@@ -37,7 +37,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.9"
+      version = "= 0.1.0"
     }
   }
 }
@@ -83,27 +83,15 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
-- Provider `0.1.0-alpha.9` local `go test ./...` and `go build
+- Provider `0.1.0` local `go test ./...` and `go build
   ./cmd/terraform-provider-betternat` passed before publication.
-- Provider `0.1.0-alpha.9` still uses the alpha6 runtime artifact manifest for
-  normal installs; runtime alpha8 validation requires explicit artifact
-  overrides.
-- Terraform `v1.14.7` Registry install and validate passed for provider
-  `0.1.0-alpha.7`.
-- Provider `0.1.0-alpha.7` clean AWS validation passed for bootstrap,
-  proactive handover, destroy, and residual scan.
-- Terraform `v1.14.7` local override validate passed for
+- Terraform `v1.14.7` local dev override validate passed for
   `examples/local-override`, `examples/provider`, and
-  `examples/resources/betternat_gateway` on `linux/amd64` for provider
-  `0.1.0-alpha.6`.
-- Terraform `v1.15.6` local override validate passed on `darwin_arm64`.
-- OpenTofu `v1.12.3` local override validate passed on `darwin_arm64`.
-- Terraform `v1.15.6` filesystem mirror install from provider release zip passed on `darwin_arm64`.
-- OpenTofu `v1.12.3` filesystem mirror install from provider release zip passed on `darwin_arm64` when source explicitly used `registry.terraform.io/nowakeai/betternat`.
-- OpenTofu Registry provider protocol lists `0.1.0-alpha.4` for darwin/arm64, linux/amd64, and linux/arm64.
-- Terraform Registry install and validate passed for `nowakeai/betternat` `0.1.0-alpha.4`.
-- OpenTofu Registry propagation for provider `0.1.0-alpha.7` was still pending
-  during the final validation window.
+  `examples/resources/betternat_gateway` on `linux/amd64`.
+- BetterNAT runtime `v0.1.0` release artifacts and checksums are embedded for
+  normal `bootstrap_mode = "cloud_init"` installs.
+- Terraform Registry is the primary install path. OpenTofu can use the same
+  provider source address through the OpenTofu Registry.
 
 OpenTofu source address note:
 
@@ -133,19 +121,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0-alpha.9
-git push origin v0.1.0-alpha.9
+git tag v0.1.0
+git push origin v0.1.0
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0-alpha.9_linux_amd64.zip
-terraform-provider-betternat_0.1.0-alpha.9_linux_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.9_darwin_arm64.zip
-terraform-provider-betternat_0.1.0-alpha.9_SHA256SUMS
-terraform-provider-betternat_0.1.0-alpha.9_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0-alpha.9_manifest.json
+terraform-provider-betternat_0.1.0_linux_amd64.zip
+terraform-provider-betternat_0.1.0_linux_arm64.zip
+terraform-provider-betternat_0.1.0_darwin_arm64.zip
+terraform-provider-betternat_0.1.0_SHA256SUMS
+terraform-provider-betternat_0.1.0_SHA256SUMS.sig
+terraform-provider-betternat_0.1.0_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:

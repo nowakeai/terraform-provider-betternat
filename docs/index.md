@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.9"
+      version = "= 0.1.0"
     }
   }
 }
@@ -22,15 +22,12 @@ provider "betternat" {}
 OpenTofu can use the same `source = "nowakeai/betternat"` address because the
 provider is registered in the OpenTofu Registry.
 
-## Current Alpha Scope
+## Current Scope
 
-`0.1.0-alpha.9` is a technical preview of the provider distribution path.
-
-The provider currently deploys the `betternat_gateway` resource through the
-default `bootstrap_mode = "cloud_init"` flow. BetterNAT does not publish a
-production AMI in the first alpha, so users provide an explicit Linux AMI and a
-supported `betternat_version`; the provider derives the gateway node binary URLs
-and checksums for that runtime version.
+The provider deploys the `betternat_gateway` resource through the default
+`bootstrap_mode = "cloud_init"` flow. Users provide an explicit Linux AMI and
+`betternat_version = "v0.1.0"`; the provider derives the gateway node binary
+URLs and checksums for that runtime version.
 
 Private prebaked BetterNAT AMIs can opt into
 `bootstrap_mode = "prebaked_ami"`. In stable EIP mode, that path disables

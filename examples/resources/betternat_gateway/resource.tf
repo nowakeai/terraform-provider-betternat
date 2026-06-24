@@ -2,7 +2,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.9"
+      version = "= 0.1.0"
     }
   }
 }
@@ -22,7 +22,7 @@ resource "betternat_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  betternat_version = "v0.1.0-alpha.8"
+  betternat_version = "v0.1.0"
 
   public_subnet_ids = {
     us-west-2a = "subnet-public-a"

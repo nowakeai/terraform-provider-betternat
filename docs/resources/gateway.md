@@ -8,7 +8,7 @@ Gateway. The provider creates the AWS support infrastructure, renders the
 gateway node bootstrap configuration, records route rollback metadata, and
 passes HA configuration to `betternat-agent`.
 
-The first alpha is AWS-only and single-AZ per resource. To cover multiple AZs,
+The resource is AWS-only and single-AZ per resource. To cover multiple AZs,
 create one `betternat_gateway` resource per AZ and pass the public subnet and
 private route tables for that AZ.
 
@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.9"
+      version = "= 0.1.0"
     }
   }
 }
@@ -69,7 +69,7 @@ resource "betternat_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  betternat_version = "v0.1.0-alpha.8"
+  betternat_version = "v0.1.0"
   bootstrap_mode    = "cloud_init"
 
   datapath_engine          = "loxilb"
@@ -91,7 +91,7 @@ resource "betternat_gateway" "egress" {
 
 `public_subnet_ids` and `private_route_table_ids` are keyed by AZ name. Every
 AZ listed in `private_route_table_ids` must have a matching public subnet entry.
-For the current alpha, configure a single AZ per resource:
+Configure a single AZ per resource:
 
 ```terraform
 public_subnet_ids = {
@@ -148,9 +148,9 @@ required.
 ## Bootstrap And Artifacts
 
 The default mode is `bootstrap_mode = "cloud_init"`. Use this for ordinary
-Linux AMIs. The first alpha does not publish a BetterNAT AMI, so the public
-quick-start path provides `ami_id` and sets `betternat_version` for bootstrap
-installs.
+Linux AMIs. BetterNAT does not require a published BetterNAT AMI for the
+default install path; the public quick start provides `ami_id` and sets
+`betternat_version` for bootstrap installs.
 
 The provider uses `betternat_version` and `instance_type` to derive the matching
 Linux `arm64` or `amd64` GitHub Release artifacts and SHA256 checksums for
@@ -190,18 +190,18 @@ VPC with NAT/VPC endpoints may set it to `false` even in `cloud_init` mode. A
 troubleshooting environment may set it to `true` even for a prebaked stable-EIP
 AMI.
 
-### Alpha Runtime Versions
+### Runtime Version
 
-For the normal current alpha install path, use provider `0.1.0-alpha.8` or
-`0.1.0-alpha.9` with:
+For the normal install path, use the matching provider and runtime release:
 
 ```terraform
-betternat_version = "v0.1.0-alpha.6"
+betternat_version = "v0.1.0"
 ```
 
-Runtime `v0.1.0-alpha.8` can be tested with explicit artifact URL and checksum
-overrides. The alpha docs do not try to maintain a long-term support matrix. A
-formal support matrix belongs with the production release line.
+Provider patch releases may add support for additional runtime patch releases
+without changing this resource shape. If a future release introduces a breaking
+runtime compatibility change, the migration or upgrade guide will call that out
+explicitly.
 
 ## HA Lifecycle
 
@@ -293,15 +293,15 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 
 ## Optional
 
-- `cloud` (String) Cloud target. Defaults to `aws`. The first alpha only supports AWS.
-- `ami_id` (String) Explicit Linux AMI ID for gateway nodes. Required for the first alpha bootstrap path because production BetterNAT AMIs are not published yet.
-- `ami_channel` (String) Future AMI channel selector. Defaults to `stable`. Accepted values are `stable`, `candidate`, and `dev`, but the first alpha still requires `ami_id`.
+- `cloud` (String) Cloud target. Defaults to `aws`. AWS is currently supported.
+- `ami_id` (String) Explicit Linux AMI ID for gateway nodes. Required for the default bootstrap path because public BetterNAT AMIs are not required or published for the standard install path.
+- `ami_channel` (String) Future AMI channel selector. Defaults to `stable`. Accepted values are `stable`, `candidate`, and `dev`, but the current provider requires `ami_id`.
 - `instance_type` (String) Gateway node instance type. Defaults to `t3.small`. Use an instance family and architecture that match your binary artifacts.
 - `use_spot` (Boolean) Use Spot instances for the gateway ASG. Defaults to `false`. Good for disposable testing; use carefully for real egress.
 - `min_size` (Number) ASG minimum size. Defaults to `1`.
 - `desired_capacity` (Number) ASG desired capacity. Defaults to `2`, giving one active node and one standby node.
 - `max_size` (Number) ASG maximum size. Defaults to `3`.
-- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0-alpha.8`.
+- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0`.
 - `agent_binary_url` (String, Sensitive) Optional URL override for the BetterNAT agent binary installed on every gateway node.
 - `agent_binary_sha256` (String) Optional SHA256 checksum override for `agent_binary_url`.
 - `cli_binary_url` (String, Sensitive) Optional URL override for the BetterNAT CLI binary installed on every gateway node.
@@ -315,9 +315,9 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `ha_lease_ttl_seconds` (Number) Advanced override for HA lease TTL in seconds. Leave unset to use profile defaults.
 - `ha_renew_interval_seconds` (Number) Advanced override for HA lease renew interval in seconds. Leave unset to use profile defaults.
 - `prometheus_enabled` (Boolean) Expose Prometheus metrics from each gateway node. Defaults to `true`.
-- `route_mode` (String) Route failover mode. Defaults to `replace_route`. The first alpha only supports `replace_route`.
+- `route_mode` (String) Route failover mode. Defaults to `replace_route`. The current provider supports `replace_route`.
 - `route_destination_cidr` (String) Route destination managed by BetterNAT. Defaults to `0.0.0.0/0`.
-- `route_target_type` (String) Route target type. Defaults to `instance`. The first alpha only supports EC2 instance route targets.
+- `route_target_type` (String) Route target type. Defaults to `instance`. The current provider supports EC2 instance route targets.
 - `rollback_on_destroy` (Boolean) Attempt to restore captured route targets during destroy. Defaults to `true`.
 - `allow_destroy_without_rollback` (Boolean) Allow destroy to continue when rollback cannot be performed. Defaults to `false`.
 - `tags` (Map of String) Tags applied to managed AWS resources.
@@ -325,7 +325,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 ## Read-Only
 
 - `id` (String) Resource ID.
-- `lease_table_name` (String) DynamoDB lease table name. Kept for compatibility with earlier alpha state.
+- `lease_table_name` (String) DynamoDB lease table name. Kept for compatibility with earlier state.
 - `coordination_table_name` (String) DynamoDB coordination table name used for HA lease, agent registry, handover records, and future backend-mediated coordination records.
 - `peer_api_auth_token` (String, Sensitive) Provider-generated shared token rendered into gateway node config for authenticated agent-to-agent handover API calls.
 - `provider_infrastructure_revision` (String) Provider-managed infrastructure revision used for safe in-place reconciliation of supporting resources.
