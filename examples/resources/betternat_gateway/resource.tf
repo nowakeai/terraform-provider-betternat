@@ -2,7 +2,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.3"
+      version = "= 0.1.0-alpha.4"
     }
   }
 }
@@ -10,21 +10,21 @@ terraform {
 provider "betternat" {}
 
 resource "betternat_gateway" "egress" {
-  name   = "prod-egress"
+  name   = "test-egress"
   region = "us-west-2"
   vpc_id = "vpc-0123456789abcdef0"
 
   ami_id        = "ami-0123456789abcdef0"
-  instance_type = "t3.small"
+  instance_type = "t4g.small"
   use_spot      = false
 
   min_size         = 1
   desired_capacity = 2
   max_size         = 3
 
-  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.1/betternat-agent_v0.1.0-alpha.1_linux_amd64"
+  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat-agent_v0.1.0-alpha.2_linux_arm64"
   agent_binary_sha256 = "replace-with-agent-sha256"
-  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.1/betternat_v0.1.0-alpha.1_linux_amd64"
+  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat_v0.1.0-alpha.2_linux_arm64"
   cli_binary_sha256   = "replace-with-cli-sha256"
 
   public_subnet_ids = {
@@ -40,7 +40,7 @@ resource "betternat_gateway" "egress" {
   datapath_engine          = "loxilb"
   fallback_datapath_engine = "nftables"
   stable_egress_ip         = true
-  ha_profile               = "stable"
+  ha_profile               = "default"
   prometheus_enabled       = true
 
   rollback_on_destroy = true

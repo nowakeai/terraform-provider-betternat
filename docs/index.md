@@ -1,6 +1,6 @@
 # BetterNAT Provider
 
-The BetterNAT provider deploys and manages a self-hosted NAT gateway appliance stack for AWS.
+The BetterNAT provider deploys and manages a self-hosted NAT gateway node stack for AWS.
 
 BetterNAT is aimed at workloads where NAT Gateway data-processing fees dominate the bill, such as crawler fleets, Kubernetes nodes that frequently pull large public images, and blockchain/RPC nodes that download high-volume public peer data.
 
@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0-alpha.3"
+      version = "= 0.1.0-alpha.4"
     }
   }
 }
@@ -26,7 +26,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "registry.terraform.io/nowakeai/betternat"
-      version = "= 0.1.0-alpha.3"
+      version = "= 0.1.0-alpha.4"
     }
   }
 }
@@ -36,9 +36,9 @@ provider "betternat" {}
 
 ## Current Alpha Scope
 
-`0.1.0-alpha.3` is a technical preview of the provider distribution path.
+`0.1.0-alpha.4` is a technical preview of the provider distribution path.
 
-The provider currently deploys the `betternat_gateway` resource through a bootstrap flow. BetterNAT does not publish a production AMI in the first alpha, so users must provide an explicit Linux AMI and release artifact URLs/checksums for the appliance binaries.
+The provider currently deploys the `betternat_gateway` resource through a bootstrap flow. BetterNAT does not publish a production AMI in the first alpha, so users must provide an explicit Linux AMI and release artifact URLs/checksums for the gateway node binaries.
 
 ## Authentication
 

@@ -1,28 +1,28 @@
 # betternat_gateway
 
-`betternat_gateway` deploys a BetterNAT appliance pool for AWS egress.
+`betternat_gateway` deploys a BetterNAT gateway node pool for AWS egress.
 
-The resource creates and manages the infrastructure needed by the alpha gateway stack, including appliance capacity, bootstrap configuration, route ownership metadata, and HA control-plane configuration.
+The resource creates and manages the infrastructure needed by the alpha gateway stack, including gateway node capacity, bootstrap configuration, route ownership metadata, and HA control-plane configuration.
 
 ## Example Usage
 
 ```terraform
 resource "betternat_gateway" "egress" {
-  name   = "prod-egress"
+  name   = "test-egress"
   region = "us-west-2"
   vpc_id = "vpc-0123456789abcdef0"
 
   ami_id        = "ami-0123456789abcdef0"
-  instance_type = "t3.small"
+  instance_type = "t4g.small"
   use_spot      = false
 
   min_size         = 1
   desired_capacity = 2
   max_size         = 3
 
-  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.1/betternat-agent_v0.1.0-alpha.1_linux_arm64"
+  agent_binary_url    = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat-agent_v0.1.0-alpha.2_linux_arm64"
   agent_binary_sha256 = "replace-with-agent-sha256"
-  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.1/betternat_v0.1.0-alpha.1_linux_arm64"
+  cli_binary_url      = "https://github.com/nowakeai/betternat/releases/download/v0.1.0-alpha.2/betternat_v0.1.0-alpha.2_linux_arm64"
   cli_binary_sha256   = "replace-with-cli-sha256"
 
   public_subnet_ids = {
@@ -38,7 +38,7 @@ resource "betternat_gateway" "egress" {
   datapath_engine          = "loxilb"
   fallback_datapath_engine = "nftables"
   stable_egress_ip         = true
-  ha_profile               = "stable"
+  ha_profile               = "default"
   prometheus_enabled       = true
 
   rollback_on_destroy = true
@@ -83,7 +83,7 @@ terraform apply -replace=betternat_gateway.egress
 - `cloud` (String) Cloud target. Defaults to `aws`.
 - `ami_id` (String) Explicit Linux AMI ID. Required for the first alpha bootstrap path.
 - `ami_channel` (String) Future AMI channel selector. Defaults to `stable`.
-- `instance_type` (String) Gateway appliance instance type. Defaults to `t3.small`.
+- `instance_type` (String) Gateway node instance type. Defaults to `t3.small`.
 - `use_spot` (Boolean) Use Spot instances. Defaults to `false`.
 - `min_size` (Number) ASG minimum size.
 - `desired_capacity` (Number) ASG desired capacity.
@@ -97,10 +97,10 @@ terraform apply -replace=betternat_gateway.egress
 - `datapath_engine` (String) Primary datapath. Defaults to `loxilb`.
 - `fallback_datapath_engine` (String) Fallback datapath. Defaults to `nftables`.
 - `stable_egress_ip` (Boolean) Manage a shared EIP so new flows converge back to the same public IP after failover. Defaults to `true`.
-- `ha_profile` (String) HA timing profile. Use `stable`, `balanced`, or `fast`. Defaults to `stable`.
+- `ha_profile` (String) HA timing profile. Use `default`. Legacy values `stable`, `balanced`, and `fast` are accepted as aliases for `default`.
 - `ha_lease_ttl_seconds` (Number) Advanced override for HA lease TTL in seconds.
 - `ha_renew_interval_seconds` (Number) Advanced override for HA lease renew interval in seconds.
-- `prometheus_enabled` (Boolean) Expose Prometheus metrics from each appliance. Defaults to `true`.
+- `prometheus_enabled` (Boolean) Expose Prometheus metrics from each gateway node. Defaults to `true`.
 - `route_mode` (String) Route failover mode. Defaults to `replace_route`.
 - `route_destination_cidr` (String) Route destination managed by BetterNAT. Defaults to `0.0.0.0/0`.
 - `route_target_type` (String) Route target type. Defaults to `instance`.
@@ -112,14 +112,17 @@ terraform apply -replace=betternat_gateway.egress
 
 - `id` (String) Resource ID.
 - `lease_table_name` (String) DynamoDB lease table name.
-- `agent_config_json` (String, Sensitive) Rendered appliance agent configuration.
+- `agent_config_json` (String, Sensitive) Rendered gateway node agent configuration.
 - `agent_config_hash` (String) Hash of the rendered agent configuration.
-- `user_data` (String, Sensitive) Rendered appliance cloud-init user data.
+- `user_data` (String, Sensitive) Rendered gateway node cloud-init user data.
 - `install_plan_json` (String) Rendered install plan metadata.
 - `managed_route_table_ids` (List of String) Route tables managed by the gateway.
 - `egress_public_ips` (Map of String) Observed egress public IPs.
-- `active_instance_ids` (Map of String) Active appliance instance IDs per availability zone.
-- `standby_instance_ids` (Map of String) Standby appliance instance IDs per availability zone.
+- `active_instance_ids` (Map of String) Active gateway node instance IDs per availability zone.
+- `standby_instance_ids` (Map of String) Standby gateway node instance IDs per availability zone.
 - `rollback_route_targets_json` (String) Captured rollback route targets.
 - `control_plane_status_json` (String) Control-plane status metadata.
+- `coordination_table_name` (String) DynamoDB coordination table name.
+- `peer_api_auth_token` (String, Sensitive) Shared token for authenticated peer handover API calls.
+- `provider_infrastructure_revision` (String) Provider-managed infrastructure revision used for safe in-place reconciliation.
 - `status` (String) Resource status summary.
