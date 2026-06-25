@@ -2,14 +2,14 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
 
 provider "betternat" {}
 
-resource "betternat_gateway" "egress" {
+resource "betternat_aws_gateway" "egress" {
   name   = "test-egress"
   region = "us-west-2"
   vpc_id = "vpc-0123456789abcdef0"

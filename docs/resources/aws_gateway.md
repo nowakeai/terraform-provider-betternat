@@ -1,6 +1,6 @@
-# betternat_gateway
+# betternat_aws_gateway
 
-`betternat_gateway` deploys a BetterNAT gateway node pool for AWS egress.
+`betternat_aws_gateway` deploys a BetterNAT gateway node pool for AWS egress.
 
 Use this resource when you want private route tables to send internet-bound
 traffic through a self-managed BetterNAT gateway node pool instead of an AWS NAT
@@ -9,7 +9,7 @@ gateway node bootstrap configuration, records route rollback metadata, and
 passes HA configuration to `betternat-agent`.
 
 The resource is AWS-only and single-AZ per resource. To cover multiple AZs,
-create one `betternat_gateway` resource per AZ and pass the public subnet and
+create one `betternat_aws_gateway` resource per AZ and pass the public subnet and
 private route tables for that AZ.
 
 ## What This Resource Manages
@@ -36,14 +36,14 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
 
 provider "betternat" {}
 
-resource "betternat_gateway" "egress" {
+resource "betternat_aws_gateway" "egress" {
   name   = "prod-egress-a"
   region = "us-west-2"
   vpc_id = aws_vpc.main.id
@@ -238,7 +238,7 @@ overrides, route ownership, datapath, EIP mode, HA timing, AMI, instance type,
 subnet IDs, private CIDRs, or tags requires replacing the resource:
 
 ```shell
-terraform apply -replace=betternat_gateway.egress
+terraform apply -replace=betternat_aws_gateway.egress
 ```
 
 Provider upgrades may reconcile safe supporting resources in place, such as IAM

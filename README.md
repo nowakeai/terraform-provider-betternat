@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
@@ -37,7 +37,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
@@ -83,11 +83,11 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
-- Provider `0.1.1` local `go test ./...` and `go build
-  ./cmd/terraform-provider-betternat` passed before publication.
+- Provider surface reset validation uses local dev overrides until `0.2.0` is
+  published.
 - Terraform `v1.14.7` local dev override validate passed for
   `examples/local-override`, `examples/provider`, and
-  `examples/resources/betternat_gateway` on `linux/amd64`.
+  `examples/resources/betternat_aws_gateway` on `linux/amd64`.
 - BetterNAT runtime `v0.1.0` release artifacts and checksums are embedded for
   normal `bootstrap_mode = "cloud_init"` installs.
 - Terraform Registry is the primary install path. OpenTofu can use the same
@@ -121,19 +121,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.1
-git push origin v0.1.1
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.1_linux_amd64.zip
-terraform-provider-betternat_0.1.1_linux_arm64.zip
-terraform-provider-betternat_0.1.1_darwin_arm64.zip
-terraform-provider-betternat_0.1.1_SHA256SUMS
-terraform-provider-betternat_0.1.1_SHA256SUMS.sig
-terraform-provider-betternat_0.1.1_manifest.json
+terraform-provider-betternat_0.2.0_linux_amd64.zip
+terraform-provider-betternat_0.2.0_linux_arm64.zip
+terraform-provider-betternat_0.2.0_darwin_arm64.zip
+terraform-provider-betternat_0.2.0_SHA256SUMS
+terraform-provider-betternat_0.2.0_SHA256SUMS.sig
+terraform-provider-betternat_0.2.0_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:

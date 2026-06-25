@@ -11,7 +11,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
@@ -24,7 +24,7 @@ provider is registered in the OpenTofu Registry.
 
 ## Current Scope
 
-The provider deploys the `betternat_gateway` resource through the default
+The provider deploys the `betternat_aws_gateway` resource through the default
 `bootstrap_mode = "cloud_init"` flow. Users provide an explicit Linux AMI and
 `betternat_version = "v0.1.0"`; the provider derives the gateway node binary
 URLs and checksums for that runtime version.
@@ -36,6 +36,12 @@ and no first-boot dependency downloads are required.
 
 `associate_public_ip_address` is available as an advanced launch-template
 override when an environment needs to force the per-node public IPv4 setting.
+
+The provider also exposes `betternat_runtime_artifacts` for release artifact
+metadata and `betternat_aws_gateway_status` for read-only AWS control-plane
+status reads from an existing install plan. `betternat_gcp_gateway_status` is
+reserved and returns a not-implemented diagnostic until GCP alpha validation is
+complete.
 
 Provider patch releases are intended to be non-breaking. They must not remove
 Terraform fields, remove documented `betternat_version` support, introduce
