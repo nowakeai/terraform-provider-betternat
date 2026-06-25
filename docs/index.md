@@ -38,10 +38,14 @@ and no first-boot dependency downloads are required.
 override when an environment needs to force the per-node public IPv4 setting.
 
 The provider also exposes `betternat_runtime_artifacts` for release artifact
-metadata and `betternat_aws_gateway_status` for read-only AWS control-plane
-status reads from an existing install plan. `betternat_gcp_gateway_status` is
-reserved and returns a not-implemented diagnostic until GCP alpha validation is
-complete.
+metadata, `betternat_aws_gateway_status` for read-only AWS control-plane
+status reads from an existing install plan, and a narrow GCP alpha surface:
+`betternat_gcp_gateway` plus `betternat_gcp_gateway_status`.
+
+The GCP alpha path manages GCE forwarding VMs and a tagged route only. It does
+not yet provide BetterNAT agent lease coordination, LoxiLB-on-GCE validation,
+stable public IP handover, production GKE route migration safety, or production
+HA guarantees.
 
 Provider patch releases are intended to be non-breaking. They must not remove
 Terraform fields, remove documented `betternat_version` support, introduce

@@ -25,7 +25,9 @@ terraform {
 provider "betternat" {}
 ```
 
-Registry documentation lives under [`docs/`](docs/) and resource examples under [`examples/`](examples/).
+Registry documentation lives under [`docs/`](docs/) and resource examples under
+[`examples/`](examples/). The GCP surface is alpha-only and intended for
+disposable forwarding validation, not production HA.
 
 ## OpenTofu
 
