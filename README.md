@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0"
+      version = "= 0.1.1"
     }
   }
 }
@@ -37,7 +37,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.0"
+      version = "= 0.1.1"
     }
   }
 }
@@ -83,7 +83,7 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
-- Provider `0.1.0` local `go test ./...` and `go build
+- Provider `0.1.1` local `go test ./...` and `go build
   ./cmd/terraform-provider-betternat` passed before publication.
 - Terraform `v1.14.7` local dev override validate passed for
   `examples/local-override`, `examples/provider`, and
@@ -121,19 +121,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.1.0_linux_amd64.zip
-terraform-provider-betternat_0.1.0_linux_arm64.zip
-terraform-provider-betternat_0.1.0_darwin_arm64.zip
-terraform-provider-betternat_0.1.0_SHA256SUMS
-terraform-provider-betternat_0.1.0_SHA256SUMS.sig
-terraform-provider-betternat_0.1.0_manifest.json
+terraform-provider-betternat_0.1.1_linux_amd64.zip
+terraform-provider-betternat_0.1.1_linux_arm64.zip
+terraform-provider-betternat_0.1.1_darwin_arm64.zip
+terraform-provider-betternat_0.1.1_SHA256SUMS
+terraform-provider-betternat_0.1.1_SHA256SUMS.sig
+terraform-provider-betternat_0.1.1_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:
