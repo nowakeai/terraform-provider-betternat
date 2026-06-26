@@ -59,7 +59,7 @@ require (
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
-	github.com/nowakeai/betternat v0.1.1-0.20260626131904-361118fbec89
+	github.com/nowakeai/betternat v0.2.1-0.20260626160119-a2c778275bdc
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
