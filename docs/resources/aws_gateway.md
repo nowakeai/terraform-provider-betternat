@@ -69,7 +69,7 @@ resource "betternat_aws_gateway" "egress" {
   desired_capacity = 2
   max_size         = 3
 
-  betternat_version = "v0.1.0"
+  betternat_version = "v0.2.0"
   bootstrap_mode    = "cloud_init"
 
   datapath_engine = "loxilb"
@@ -194,7 +194,7 @@ AMI.
 For the normal install path, use the matching provider and runtime release:
 
 ```terraform
-betternat_version = "v0.1.0"
+betternat_version = "v0.2.0"
 ```
 
 Provider patch releases may add support for additional runtime patch releases
@@ -300,7 +300,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `min_size` (Number) ASG minimum size. Defaults to `1`.
 - `desired_capacity` (Number) ASG desired capacity. Defaults to `2`, giving one active node and one standby node.
 - `max_size` (Number) ASG maximum size. Defaults to `3`.
-- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.1.0`.
+- `betternat_version` (String) BetterNAT runtime release tag used to derive agent/CLI GitHub Release artifact URLs and checksums for bootstrap installs. Example: `v0.2.0`.
 - `agent_binary_url` (String, Sensitive) Optional URL override for the BetterNAT agent binary installed on every gateway node.
 - `agent_binary_sha256` (String) Optional SHA256 checksum override for `agent_binary_url`.
 - `cli_binary_url` (String, Sensitive) Optional URL override for the BetterNAT CLI binary installed on every gateway node.

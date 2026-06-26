@@ -1,6 +1,6 @@
 # betternat_gcp_gateway_status
 
-Reads current GCP Compute state for a BetterNAT GCP alpha gateway without
+Reads current GCP Compute state for a BetterNAT GCP gateway without
 modifying cloud resources.
 
 ```hcl
@@ -20,7 +20,7 @@ data "betternat_gcp_gateway_status" "egress" {
 
 | Name | Description |
 | --- | --- |
-| `name` | BetterNAT GCP alpha gateway base name. |
+| `name` | BetterNAT GCP gateway base name. |
 | `project_id` | GCP project ID. |
 | `region` | GCP region. |
 | `zone` | GCP zone containing provider-owned gateway VMs. |

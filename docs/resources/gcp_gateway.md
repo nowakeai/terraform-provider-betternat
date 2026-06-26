@@ -100,5 +100,5 @@ public IP before the static IP returns.
 
 ## Update Behavior
 
-Updates are intentionally not implemented in the first GCP alpha. Replace the
+Updates are intentionally not implemented in the first GCP release. Replace the
 resource to change topology.
