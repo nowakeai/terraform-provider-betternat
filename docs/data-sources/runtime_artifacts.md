@@ -7,7 +7,7 @@ artifact URLs and SHA256 checksums.
 
 ```terraform
 data "betternat_runtime_artifacts" "current" {
-  version = "v0.1.0"
+  version = "v0.2.0"
   os      = "linux"
   arch    = "arm64"
 }
@@ -17,7 +17,7 @@ data "betternat_runtime_artifacts" "current" {
 
 ### Required
 
-- `version` (String) BetterNAT runtime release tag, for example `v0.1.0`.
+- `version` (String) BetterNAT runtime release tag, for example `v0.2.0`.
 - `os` (String) Runtime operating system. Current supported value: `linux`.
 - `arch` (String) Runtime architecture. Current supported values: `amd64` and
   `arm64`.

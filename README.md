@@ -86,13 +86,14 @@ tofu -chdir=examples/local-override validate
 
 Current validation status:
 
-- Provider surface reset validation uses local dev overrides until `0.2.0` is
-  published.
+- Provider surface reset validation passed with local dev overrides before
+  publication.
 - Terraform `v1.14.7` local dev override validate passed for
   `examples/local-override`, `examples/provider`, and
   `examples/resources/betternat_aws_gateway` on `linux/amd64`.
-- BetterNAT runtime `v0.1.0` release artifacts and checksums are embedded for
-  normal `bootstrap_mode = "cloud_init"` installs.
+- BetterNAT runtime `v0.2.0` release artifacts and checksums are the intended
+  normal `bootstrap_mode = "cloud_init"` install path once the runtime release
+  artifacts are published and added to the provider manifest.
 - Terraform Registry is the primary install path. OpenTofu can use the same
   provider source address through the OpenTofu Registry.
 
