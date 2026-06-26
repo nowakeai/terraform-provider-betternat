@@ -1,6 +1,6 @@
-# betternat_gateway
+# betternat_aws_gateway
 
-`betternat_gateway` deploys a BetterNAT gateway node pool for AWS egress.
+`betternat_aws_gateway` deploys a BetterNAT gateway node pool for AWS egress.
 
 Use this resource when you want private route tables to send internet-bound
 traffic through a self-managed BetterNAT gateway node pool instead of an AWS NAT
@@ -9,7 +9,7 @@ gateway node bootstrap configuration, records route rollback metadata, and
 passes HA configuration to `betternat-agent`.
 
 The resource is AWS-only and single-AZ per resource. To cover multiple AZs,
-create one `betternat_gateway` resource per AZ and pass the public subnet and
+create one `betternat_aws_gateway` resource per AZ and pass the public subnet and
 private route tables for that AZ.
 
 ## What This Resource Manages
@@ -36,14 +36,14 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = "= 0.1.1"
+      version = ">= 0.2.0"
     }
   }
 }
 
 provider "betternat" {}
 
-resource "betternat_gateway" "egress" {
+resource "betternat_aws_gateway" "egress" {
   name   = "prod-egress-a"
   region = "us-west-2"
   vpc_id = aws_vpc.main.id
@@ -72,8 +72,7 @@ resource "betternat_gateway" "egress" {
   betternat_version = "v0.1.0"
   bootstrap_mode    = "cloud_init"
 
-  datapath_engine          = "loxilb"
-  fallback_datapath_engine = "nftables"
+  datapath_engine = "loxilb"
 
   stable_egress_ip   = true
   ha_profile         = "default"
@@ -238,7 +237,7 @@ overrides, route ownership, datapath, EIP mode, HA timing, AMI, instance type,
 subnet IDs, private CIDRs, or tags requires replacing the resource:
 
 ```shell
-terraform apply -replace=betternat_gateway.egress
+terraform apply -replace=betternat_aws_gateway.egress
 ```
 
 Provider upgrades may reconcile safe supporting resources in place, such as IAM
@@ -293,7 +292,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 
 ## Optional
 
-- `cloud` (String) Cloud target. Defaults to `aws`. AWS is currently supported.
+- `cloud` (String) Cloud target. Defaults to `aws`.
 - `ami_id` (String) Explicit Linux AMI ID for gateway nodes. Required for the default bootstrap path because public BetterNAT AMIs are not required or published for the standard install path.
 - `ami_channel` (String) Future AMI channel selector. Defaults to `stable`. Accepted values are `stable`, `candidate`, and `dev`, but the current provider requires `ami_id`.
 - `instance_type` (String) Gateway node instance type. Defaults to `t3.small`. Use an instance family and architecture that match your binary artifacts.
@@ -308,8 +307,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `cli_binary_sha256` (String) Optional SHA256 checksum override for `cli_binary_url`.
 - `loxicmd_binary_url` (String, Sensitive) Optional URL for a host `loxicmd` binary. If unset, bootstrap installs a Docker wrapper.
 - `loxicmd_binary_sha256` (String) SHA256 checksum for `loxicmd_binary_url`.
-- `datapath_engine` (String) Primary datapath. Defaults to `loxilb`. Accepted values are `loxilb` and `nftables`.
-- `fallback_datapath_engine` (String) Fallback datapath. Defaults to `nftables`. Accepted values are empty string or `nftables`.
+- `datapath_engine` (String) Primary datapath. Defaults to `loxilb`.
 - `stable_egress_ip` (Boolean) Manage a shared EIP so new private-subnet egress flows converge back to the same public IP after failover. Gateway nodes may still have ordinary public IPv4 addresses for bootstrap and management. Defaults to `true`.
 - `ha_profile` (String) HA timing profile. Use `default`. Legacy values `stable`, `balanced`, and `fast` are accepted as aliases for `default`.
 - `ha_lease_ttl_seconds` (Number) Advanced override for HA lease TTL in seconds. Leave unset to use profile defaults.
