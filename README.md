@@ -26,8 +26,9 @@ provider "betternat" {}
 ```
 
 Registry documentation lives under [`docs/`](docs/) and resource examples under
-[`examples/`](examples/). The GCP surface is alpha-only and intended for
-disposable forwarding validation, not production HA.
+[`examples/`](examples/). The AWS and GCP modules are the recommended user
+install surfaces; provider resources are lower-level primitives for module
+authors and advanced validation.
 
 ## OpenTofu
 

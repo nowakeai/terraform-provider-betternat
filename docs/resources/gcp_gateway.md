@@ -1,28 +1,43 @@
 # betternat_gcp_gateway
 
-`betternat_gcp_gateway` is an alpha resource for disposable GCP validation.
+`betternat_gcp_gateway` manages a BetterNAT GCP gateway group.
 
-It manages provider-owned GCE gateway VMs with `canIpForward=true`, an nftables
-masquerade startup script, and one tagged default route to the active gateway.
+Most users should prefer the GCP module:
 
-It does not yet provide BetterNAT agent lease coordination, LoxiLB-on-GCE
-validation, stable public IP handover, production GKE route migration safety,
-or production HA guarantees.
+```hcl
+module "betternat" {
+  source  = "nowakeai/betternat/google"
+  version = "~> 0.2"
+}
+```
+
+The resource manages provider-owned GCE gateway VMs or a zonal MIG,
+`canIpForward=true`, LoxiLB bootstrap, Firestore-backed HA, a tagged default
+route, and optional stable public identity through an existing regional static
+external IPv4 address.
 
 ## Example Usage
 
 ```hcl
 resource "betternat_gcp_gateway" "egress" {
-  name       = "lab-egress"
-  project_id = "shared-resources-alt"
-  region     = "us-west1"
-  zone       = "us-west1-a"
+  name       = "prod-egress"
+  project_id = var.project_id
+  region     = "us-west2"
+  zone       = "us-west2-a"
 
-  network    = google_compute_network.lab.name
-  subnetwork = google_compute_subnetwork.lab.name
-  client_tag = "lab-private-client"
+  network    = google_compute_network.main.name
+  subnetwork = google_compute_subnetwork.private.name
+  client_tag = "private-egress-client"
 
-  private_cidrs = ["10.91.0.0/24"]
+  private_cidrs = ["10.10.0.0/16"]
+
+  enable_agent_ha       = true
+  capacity_repair_mode  = "mig"
+  betternat_version     = "v0.2.0"
+  firestore_database_id = "(default)"
+
+  manage_runtime_service_account = true
+  manage_runtime_iam             = true
 }
 ```
 
@@ -52,7 +67,14 @@ VPC, subnet, firewall rules, or client workloads.
 | `machine_type` | `e2-small` | GCE gateway VM machine type. |
 | `image_project` | `debian-cloud` | Image project for gateway boot disks. |
 | `image_family` | `debian-12` | Image family for gateway boot disks. |
-| `gateway_count` | `2` | Number of provider-owned gateway VMs. The initial route points at `gw-a`. |
+| `gateway_count` | `2` | Number of gateway VMs. |
+| `capacity_repair_mode` | `unmanaged` | `mig` creates a zonal Managed Instance Group; modules use this for the GA path. |
+| `enable_agent_ha` | `false` | Enables Firestore-backed BetterNAT agent HA. |
+| `betternat_version` | none | BetterNAT runtime release tag for HA bootstrap artifacts. |
+| `firestore_database_id` | `(default)` | Firestore Native database for HA coordination. |
+| `manage_runtime_service_account` | `false` | Create/delete the runtime service account. |
+| `manage_runtime_iam` | `false` | Create/update the runtime custom role and binding. |
+| `stable_public_identity_address_name` | none | Existing regional static external IPv4 address name for stable public identity. |
 
 ## Computed
 
@@ -63,6 +85,18 @@ VPC, subnet, firewall rules, or client workloads.
 | `route_target` | Current route next-hop instance base name. |
 | `startup_script` | Sensitive generated gateway startup script. |
 | `status` | Provider status summary. |
+| `runtime_iam_permissions` | Permissions required by the GCP runtime service account. |
+
+## Stable Public Identity
+
+Set `stable_public_identity_address_name` to an existing regional static
+external IPv4 address name when private workloads need a stable egress identity.
+The provider does not create or delete that address.
+
+GCP handover is connectivity-first: BetterNAT moves the private workload route
+first, then converges the static public identity. During that transition,
+successful new connections may temporarily use the target gateway's ordinary
+public IP before the static IP returns.
 
 ## Update Behavior
 
