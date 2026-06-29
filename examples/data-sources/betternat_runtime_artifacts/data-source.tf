@@ -2,7 +2,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.0"
+      version = ">= 0.2.1"
     }
   }
 }
@@ -10,7 +10,7 @@ terraform {
 provider "betternat" {}
 
 data "betternat_runtime_artifacts" "current" {
-  version = "v0.2.0"
+  version = "v0.2.1"
   os      = "linux"
   arch    = "arm64"
 }

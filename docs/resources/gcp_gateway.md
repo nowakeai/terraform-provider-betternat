@@ -33,7 +33,7 @@ resource "betternat_gcp_gateway" "egress" {
 
   enable_agent_ha       = true
   capacity_repair_mode  = "mig"
-  betternat_version     = "v0.2.0"
+  betternat_version     = "v0.2.1"
   firestore_database_id = "(default)"
 
   manage_runtime_service_account = true
