@@ -108,6 +108,8 @@ github.com/mitchellh/go-testing-interface v1.14.1 h1:jrgshOhYAUVNMAJiKbEu7EqAwgJ
 github.com/mitchellh/go-testing-interface v1.14.1/go.mod h1:gfgS7OtZj6MA4U1UrDRp04twqAjfvlZyCfX3sDjEym8=
 github.com/nowakeai/betternat v0.2.2-0.20260629114828-26780e5ae335 h1:imVK3DrgBdNIvs91OVVlhrKlWZwdRddVQysbFIH/B3M=
 github.com/nowakeai/betternat v0.2.2-0.20260629114828-26780e5ae335/go.mod h1:UaXw4rTBSmr6wc19va6lhoqsCey86jLTnmvqi7qIxOI=
+github.com/nowakeai/betternat v0.2.2 h1:8FUpieJaPG27NLBiRdYrsFK6sbbzyjKliLbus9eJ0T0=
+github.com/nowakeai/betternat v0.2.2/go.mod h1:UaXw4rTBSmr6wc19va6lhoqsCey86jLTnmvqi7qIxOI=
 github.com/oklog/run v1.2.0 h1:O8x3yXwah4A73hJdlrwo/2X6J62gE5qTMusH0dvz60E=
 github.com/oklog/run v1.2.0/go.mod h1:mgDbKRSwPhJfesJ4PntqFUbKQRZ50NgmZTSPlFA0YFk=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

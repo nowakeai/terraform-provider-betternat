@@ -2,7 +2,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.1"
+      version = ">= 0.2.2"
     }
   }
 }
@@ -34,11 +34,14 @@ resource "betternat_aws_gateway" "egress" {
 
   private_cidrs = ["10.0.0.0/8"]
 
-  datapath_engine          = "loxilb"
-  fallback_datapath_engine = "nftables"
-  stable_egress_ip         = true
-  ha_profile               = "default"
-  prometheus_enabled       = true
+  datapath_engine                = "loxilb"
+  fallback_datapath_engine       = "nftables"
+  stable_egress_ip               = true
+  retain_managed_eips_on_destroy = false
+  primary_interface              = "auto"
+  snat_interface                 = "auto"
+  ha_profile                     = "default"
+  prometheus_enabled             = true
 
   rollback_on_destroy = true
 
