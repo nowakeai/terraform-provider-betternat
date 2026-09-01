@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.0"
+      version = ">= 0.2.2"
     }
   }
 }
@@ -75,6 +75,11 @@ resource "betternat_aws_gateway" "egress" {
   datapath_engine = "loxilb"
 
   stable_egress_ip   = true
+  eip_allocation_ids = {
+    us-west-2a = aws_eip.betternat.id
+  }
+  primary_interface   = "auto"
+  snat_interface      = "auto"
   ha_profile         = "default"
   prometheus_enabled = true
 
@@ -117,6 +122,17 @@ active.
 With `stable_egress_ip = true`, BetterNAT uses a shared EIP. On failover, the
 new active node associates the shared EIP and updates the private route target.
 Use this mode when downstream services allowlist your public source IP.
+
+For production, prefer an independent `aws_eip` resource and pass its
+allocation ID through `eip_allocation_ids`. BetterNAT associates and observes
+externally managed EIPs but never releases them, so the public identity survives
+gateway destroy and replacement.
+
+For an existing provider-managed EIP, set
+`retain_managed_eips_on_destroy = true` and apply before replacement. A
+same-name recreation re-adopts a uniquely tagged retained EIP. Set retention
+back to `false` before a final destroy that should release provider-managed
+addresses.
 
 This mode keeps the public IP stable for new flows after failover. Existing
 connections are not preserved.
@@ -225,15 +241,15 @@ increase sensitivity to transient AWS/DynamoDB/API latency.
 
 ## Update Lifecycle
 
-Only capacity fields are intended to update in place in the current provider
-version:
+Capacity fields and bootstrap-only changes that preserve topology and ownership
+can update in place in the current provider version:
 
 - `min_size`
 - `desired_capacity`
 - `max_size`
 
 Changing topology, `bootstrap_mode`, `betternat_version`, bootstrap artifact
-overrides, route ownership, datapath, EIP mode, HA timing, AMI, instance type,
+overrides, route ownership, datapath, EIP mode or allocation ownership, HA timing, AMI, instance type,
 subnet IDs, private CIDRs, or tags requires replacing the resource:
 
 ```shell
@@ -309,6 +325,10 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 - `loxicmd_binary_sha256` (String) SHA256 checksum for `loxicmd_binary_url`.
 - `datapath_engine` (String) Primary datapath. Defaults to `loxilb`.
 - `stable_egress_ip` (Boolean) Manage a shared EIP so new private-subnet egress flows converge back to the same public IP after failover. Gateway nodes may still have ordinary public IPv4 addresses for bootstrap and management. Defaults to `true`.
+- `eip_allocation_ids` (Map of String) Externally managed AWS EIP allocation IDs keyed by availability zone. BetterNAT associates and observes these EIPs but never releases them. Omitted zones use provider-managed EIPs. Requires `stable_egress_ip = true`.
+- `retain_managed_eips_on_destroy` (Boolean) Retain provider-managed EIPs during gateway destroy so same-name recreation can re-adopt them. Defaults to `false`.
+- `primary_interface` (String) Primary gateway interface name. Defaults to `auto`, which detects the interface owning the IPv4 default route during bootstrap.
+- `snat_interface` (String) SNAT interface name. Defaults to `auto`, which uses the detected primary interface during bootstrap.
 - `ha_profile` (String) HA timing profile. Use `default`. Legacy values `stable`, `balanced`, and `fast` are accepted as aliases for `default`.
 - `ha_lease_ttl_seconds` (Number) Advanced override for HA lease TTL in seconds. Leave unset to use profile defaults.
 - `ha_renew_interval_seconds` (Number) Advanced override for HA lease renew interval in seconds. Leave unset to use profile defaults.

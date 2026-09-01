@@ -17,7 +17,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.0"
+      version = ">= 0.2.2"
     }
   }
 }
@@ -40,7 +40,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.0"
+      version = ">= 0.2.2"
     }
   }
 }
@@ -125,19 +125,19 @@ Required repository secrets:
 Tags must be v-prefixed semver tags, for example:
 
 ```sh
-git tag v0.2.1
-git push origin v0.2.1
+git tag v0.2.2
+git push origin v0.2.2
 ```
 
 The workflow uploads registry-compatible assets:
 
 ```text
-terraform-provider-betternat_0.2.1_linux_amd64.zip
-terraform-provider-betternat_0.2.1_linux_arm64.zip
-terraform-provider-betternat_0.2.1_darwin_arm64.zip
-terraform-provider-betternat_0.2.1_SHA256SUMS
-terraform-provider-betternat_0.2.1_SHA256SUMS.sig
-terraform-provider-betternat_0.2.1_manifest.json
+terraform-provider-betternat_0.2.2_linux_amd64.zip
+terraform-provider-betternat_0.2.2_linux_arm64.zip
+terraform-provider-betternat_0.2.2_darwin_arm64.zip
+terraform-provider-betternat_0.2.2_SHA256SUMS
+terraform-provider-betternat_0.2.2_SHA256SUMS.sig
+terraform-provider-betternat_0.2.2_manifest.json
 ```
 
 The public key fingerprint currently registered with Terraform Registry is:
