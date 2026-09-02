@@ -36,7 +36,7 @@ terraform {
   required_providers {
     betternat = {
       source  = "nowakeai/betternat"
-      version = ">= 0.2.2"
+      version = ">= 0.2.3"
     }
   }
 }
@@ -250,7 +250,10 @@ can update in place in the current provider version:
 
 Changing topology, `bootstrap_mode`, `betternat_version`, bootstrap artifact
 overrides, route ownership, datapath, EIP mode or allocation ownership, HA timing, AMI, instance type,
-subnet IDs, private CIDRs, or tags requires replacing the resource:
+subnet IDs, private CIDRs, or tags is marked as a replacement during
+`terraform plan`. Review and apply that planned replacement normally. An
+explicit replacement remains available when the configuration itself is
+unchanged:
 
 ```shell
 terraform apply -replace=betternat_aws_gateway.egress
@@ -343,6 +346,7 @@ When `prometheus_enabled = true`, each gateway node exposes metrics on port
 ## Read-Only
 
 - `id` (String) Resource ID.
+- `generation_id` (String) Provider-generated identity for one physical gateway installation. Replacement generations use distinct Auto Scaling group and launch template names.
 - `lease_table_name` (String) DynamoDB lease table name. Kept for compatibility with earlier state.
 - `coordination_table_name` (String) DynamoDB coordination table name used for HA lease, agent registry, handover records, and future backend-mediated coordination records.
 - `peer_api_auth_token` (String, Sensitive) Provider-generated shared token rendered into gateway node config for authenticated agent-to-agent handover API calls.
